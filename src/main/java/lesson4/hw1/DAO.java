@@ -7,9 +7,9 @@ abstract class   DAO <T>  {
     protected static final String USER = "****";
     protected static final String PASS = "****";
 
-    public void delete(long id) throws SQLException{
+    public void deleteFrom(long id ,String table) throws SQLException{
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement=connection.prepareStatement("DELETE FROM FILES WHERE ID=?")) {
+             PreparedStatement preparedStatement=connection.prepareStatement("DELETE FROM "+table+" WHERE ID=?")) {
 
             preparedStatement.setLong(1,id);
 
@@ -18,7 +18,7 @@ abstract class   DAO <T>  {
         }
     }
 
-    public T findById(long id) throws SQLException{
+    public T findByIdFrom(long id,String table) throws SQLException{
         try (Connection connection = getConnection();
              Statement statement=connection.createStatement()) {
 

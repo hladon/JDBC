@@ -34,4 +34,24 @@ public class File {
     public Storage getStorage() {
         return storage;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 }

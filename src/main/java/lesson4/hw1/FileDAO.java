@@ -43,6 +43,14 @@ public class FileDAO extends DAO<File> {
         return file;
     }
 
+    public void delete(long id) throws SQLException{
+        deleteFrom(id,"FILES");
+    }
+
+    public void findById(long id) throws SQLException{
+        findByIdFrom(id,"FILES");
+    }
+
 
     protected File getObject(ResultSet resultSet) throws SQLException {
         StorageDAO storageDAO =new StorageDAO();

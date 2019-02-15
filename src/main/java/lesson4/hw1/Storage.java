@@ -28,4 +28,20 @@ public class Storage {
     public long getStorageMaxSize() {
         return storageMaxSize;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFormatsSupported(String[] formatsSupported) {
+        this.formatsSupported = formatsSupported;
+    }
+
+    public void setStorageCountry(String storageCountry) {
+        this.storageCountry = storageCountry;
+    }
+
+    public void setStorageMaxSize(long storageMaxSize) {
+        this.storageMaxSize = storageMaxSize;
+    }
 }

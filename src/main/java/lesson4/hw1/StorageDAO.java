@@ -6,9 +6,13 @@ import java.util.Arrays;
 public class StorageDAO extends DAO<Storage> {
 
 
-    public Storage save(Storage storage){
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO STORAGE VALUES (?,?,?,?)")) {
+
+    public StorageDAO(Connection connection) {
+        super(connection);
+    }
+
+    public Storage save(Storage storage) throws SQLException{
+        try (PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO STORAGE VALUES (?,?,?,?)")) {
 
             preparedStatement.setLong(1,storage.getId());
             preparedStatement.setString(2, Arrays.toString(storage.getFormatsSupported()));
@@ -17,17 +21,16 @@ public class StorageDAO extends DAO<Storage> {
 
             preparedStatement.execute();
 
-        } catch (SQLException e) {
-            System.err.println("Something went wrong");
-            e.printStackTrace();
+        } catch (SQLException sql) {
+            connection.rollback();
+            throw sql;
         }
 
         return storage;
     }
 
     public Storage update(Storage storage) throws SQLException{
-        try (Connection connection = getConnection();
-             PreparedStatement preparedStatement=connection.prepareStatement("UPDATE STORAGE SET " +
+        try (    PreparedStatement preparedStatement=connection.prepareStatement("UPDATE STORAGE SET " +
                      " FORMATS_SUPPORTED=?,STORAGE_COUNTRY=?,STORAGE_MAX_SIZE=? WHERE ID=?")) {
 
             preparedStatement.setString(1,Arrays.toString(storage.getFormatsSupported()));
@@ -37,6 +40,9 @@ public class StorageDAO extends DAO<Storage> {
 
             preparedStatement.execute();
 
+        }catch (SQLException sql) {
+            connection.rollback();
+            throw sql;
         }
         return storage;
     }

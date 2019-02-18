@@ -72,7 +72,19 @@ public class FileDAO extends DAO<File> {
     }
 
     public File findById(long id) throws SQLException {
-        return findByIdFrom(id, "FILES");
+        try (PreparedStatement statement = connection.prepareStatement("SELECT*FROM FILES WHERE ID=?")) {
+
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                return getObject(resultSet);
+            }
+
+        }catch (SQLException sql) {
+            throw sql;
+        }
+        return null;
     }
 
 

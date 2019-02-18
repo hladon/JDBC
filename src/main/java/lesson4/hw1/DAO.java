@@ -12,11 +12,11 @@ abstract class DAO<T> {
     }
 
     public void deleteFrom(long id, String table) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM " + table + " WHERE ID=?")) {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM ? WHERE ID=?")) {
+            statement.setString(1,table);
+            statement.setLong(2, id);
 
-            preparedStatement.setLong(1, id);
-
-            preparedStatement.execute();
+            statement.execute();
 
         }catch (SQLException sql) {
             connection.rollback();
@@ -25,17 +25,17 @@ abstract class DAO<T> {
     }
 
     public T findByIdFrom(long id, String table) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-
-            ResultSet resultSet = statement.executeQuery("SELECT*FROM PRODUCT WHERE ID=" + id);
+        try (PreparedStatement statement = connection.prepareStatement("SELECT*FROM ? WHERE ID=?")) {
+            statement.setString(1,table);
+            statement.setLong(2, id);
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 return getObject(resultSet);
             }
 
         }catch (SQLException sql) {
-            connection.rollback();
-            throw sql;
+              throw sql;
         }
         return null;
     }

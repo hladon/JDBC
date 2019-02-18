@@ -1,7 +1,14 @@
 package lesson4.hw1;
 
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 public class Demo {
+    private static final String DB_URL = "jdbc:oracle:thin:@gromcode-lessons.ctmtirr3ce0v.us-east-2.rds.amazonaws.com:1521:orcl";
+
+    private static final String USER = "main";
+    private static final String PASS = "QWer1234";
 
     public static void main(String[] args) throws Exception {
         File  file1 =new File(1,"Test","txt",1000,null);
@@ -13,7 +20,11 @@ public class Demo {
         String[] formats1 = {"txt","doc"};
         Storage storage1=new Storage((long)2,formats1,"Denmark",32000);
 
-        Controller.put(storage,file1);
+//        Controller.put(storage,file1);
+        try(Connection connection=DriverManager.getConnection(DB_URL, USER, PASS)){
+            FileDAO fileDAO=new FileDAO(connection);
+            System.out.println(fileDAO.findById(1));
+        }
     }
 
 

@@ -68,23 +68,13 @@ public class FileDAO extends DAO<File> {
     }
 
     public void delete(long id) throws SQLException {
-        deleteFrom(id, "FILES");
+        String query="DELETE FROM FILES WHERE ID="+id;
+        deleteQuery(query);
     }
 
     public File findById(long id) throws SQLException {
         String query="SELECT*FROM FILES WHERE ID="+id;
-        try (Statement statement = connection.createStatement()) {
-
-            ResultSet resultSet = statement.executeQuery(query);
-
-            while (resultSet.next()) {
-                return getObject(resultSet);
-            }
-
-        }catch (SQLException sql) {
-            throw sql;
-        }
-        return null;
+        return qetResult(query);
     }
 
 

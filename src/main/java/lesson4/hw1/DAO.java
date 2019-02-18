@@ -1,6 +1,7 @@
 package lesson4.hw1;
 
 import java.sql.*;
+import java.util.List;
 
 abstract class DAO<T> {
 
@@ -11,12 +12,10 @@ abstract class DAO<T> {
         this.connection = connection;
     }
 
-    public void deleteFrom(long id, String table) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM ? WHERE ID=?")) {
-            statement.setString(1,table);
-            statement.setLong(2, id);
+    public void deleteQuery( String query) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
 
-            statement.execute();
+            statement.execute(query);
 
         }catch (SQLException sql) {
             connection.rollback();
@@ -24,21 +23,22 @@ abstract class DAO<T> {
         }
     }
 
-    public T findByIdFrom(long id, String table) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT*FROM ? WHERE ID=?")) {
-            statement.setString(1,table);
-            statement.setLong(2, id);
-            ResultSet resultSet = statement.executeQuery();
+    public T qetResult(String query) throws SQLException{
+        try (Statement statement = connection.createStatement()) {
+
+            ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
                 return getObject(resultSet);
             }
 
         }catch (SQLException sql) {
-              throw sql;
+            throw sql;
         }
         return null;
     }
+
+
 
     abstract T getObject(ResultSet resultSet) throws SQLException;
 

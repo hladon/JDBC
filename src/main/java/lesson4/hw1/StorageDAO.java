@@ -48,11 +48,14 @@ public class StorageDAO extends DAO<Storage> {
     }
 
     public void delete (long id)throws SQLException{
-        deleteFrom(id,"STORAGE");
+        String query="DELETE FROM FILES WHERE ID="+id;
+        deleteQuery(query);
+
     }
 
     public Storage findById(long id) throws SQLException{
-        return findByIdFrom(id,"STORAGE");
+        String query="SELECT*FROM STORAGE WHERE ID="+id;
+        return qetResult(query);
     }
 
     protected Storage getObject(ResultSet resultSet) throws SQLException {

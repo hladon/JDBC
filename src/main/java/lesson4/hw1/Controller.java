@@ -5,10 +5,7 @@ import java.util.List;
 
 public class Controller {
 
-    private static final String DB_URL = "jdbc:oracle:thin:@gromcode-lessons.ctmtirr3ce0v.us-east-2.rds.amazonaws.com:1521:orcl";
 
-    private static final String USER = "main";
-    private static final String PASS = "QWer1234";
 
 
     public static void put(Storage storage, File file) throws Exception {

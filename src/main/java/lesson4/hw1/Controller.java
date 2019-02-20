@@ -5,10 +5,7 @@ import java.util.List;
 
 public class Controller {
 
-    private static final String DB_URL = "";
 
-    private static final String USER = "";
-    private static final String PASS = "";
 
 
     public static void put(Storage storage, File file) throws Exception {
@@ -37,7 +34,9 @@ public class Controller {
                 init(storage, file);
                 file.setStorage(storage);
                 fileDAO.update(file);
+
                 storage.setStorageMaxSize(storage.getStorageMaxSize() - file.getSize());
+                storageDAO.update(storage);
             }
 
             connection.commit();
@@ -45,7 +44,7 @@ public class Controller {
 
     }
 
-    public static void delete(Storage storage, File file) throws SQLException {
+    public static void delete(Storage storage, File file) throws Exception {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
 
@@ -55,7 +54,7 @@ public class Controller {
         }
     }
 
-    public void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
+    public static void transferAll(Storage storageFrom, Storage storageTo) throws Exception {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
             FileDAO fileDAO = new FileDAO(connection);
@@ -71,7 +70,7 @@ public class Controller {
         }
     }
 
-    public void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
+    public static void transferFile(Storage storageFrom, Storage storageTo, long id) throws Exception {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
 
@@ -86,10 +85,24 @@ public class Controller {
         }
     }
 
-    private static void remove(Storage storage, File file, Connection connection) throws SQLException {
+    public static File findFileById(long id) throws SQLException {
+        FileDAO fileDAO = new FileDAO(getConnection());
+        return fileDAO.findById(id);
+    }
+
+    public static Storage findStorageById(long id)throws SQLException {
+        StorageDAO storageDAO=new StorageDAO(getConnection());
+        return storageDAO.findById(id);
+    }
+
+    private static void remove(Storage storage, File file, Connection connection) throws Exception {
         try {
             FileDAO fileDAO = new FileDAO(connection);
             StorageDAO storageDAO = new StorageDAO(connection);
+            if (file.getStorage()==null|| !file.getStorage().equals(storage)){
+                throw new Exception("File "+file.getId()+" don`t belong to storage "+storage.getId());
+
+            }
 
             storage.setStorageMaxSize(storage.getStorageMaxSize() + file.getSize());
             file.setStorage(null);

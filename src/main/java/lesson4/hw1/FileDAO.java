@@ -40,7 +40,12 @@ public class FileDAO extends DAO<File> {
             preparedStatement.setString(1, file.getName());
             preparedStatement.setString(2, file.getFormat());
             preparedStatement.setLong(3, file.getSize());
-            preparedStatement.setLong(4, file.getStorage().getId());
+            if (file.getStorage()==null){
+                preparedStatement.setNull(4, Types.NUMERIC);
+            }else {
+                preparedStatement.setLong(4, file.getStorage().getId());
+            }
+
             preparedStatement.setLong(5, file.getId());
 
             preparedStatement.execute();

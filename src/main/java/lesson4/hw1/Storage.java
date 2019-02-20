@@ -1,5 +1,8 @@
 package lesson4.hw1;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Storage {
     private Long id;
     private String[] formatsSupported;
@@ -43,5 +46,32 @@ public class Storage {
 
     public void setStorageMaxSize(long storageMaxSize) {
         this.storageMaxSize = storageMaxSize;
+    }
+
+    @Override
+    public String toString() {
+        return "Storage{" +
+                "id=" + id +
+                ", formatsSupported=" + Arrays.toString(formatsSupported) +
+                ", storageCountry='" + storageCountry + '\'' +
+                ", storageMaxSize=" + storageMaxSize +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Storage storage = (Storage) o;
+        return Objects.equals(id, storage.id) &&
+                Arrays.equals(formatsSupported, storage.formatsSupported) &&
+                Objects.equals(storageCountry, storage.storageCountry);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, storageCountry);
+        result = 31 * result + Arrays.hashCode(formatsSupported);
+        return result;
     }
 }

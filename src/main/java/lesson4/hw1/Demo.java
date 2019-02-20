@@ -3,12 +3,11 @@ package lesson4.hw1;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Demo {
-    private static final String DB_URL = "";
 
-    private static final String USER = "";
-    private static final String PASS = "";
 
     public static void main(String[] args) throws Exception {
         File  file1 =new File(1,"Test","txt",1000,null);
@@ -16,15 +15,32 @@ public class Demo {
         File  file3 =new File(3,"Test3","doc",5000,null);
         File  file4 =new File(4,"Test4","txt",6000,null);
         String[] formats = {"txt","jpg"};
-        Storage storage=new Storage((long)1,formats,"Ukraine",21000);
+        Storage storage=new Storage((long)1,formats,"Ukraine",23000);
         String[] formats1 = {"txt","doc"};
         Storage storage1=new Storage((long)2,formats1,"Denmark",32000);
+        List<File> list=new ArrayList<>();
+        list.add(file1);
+        list.add(file2);
 
 //        Controller.put(storage,file1);
-        try(Connection connection=DriverManager.getConnection(DB_URL, USER, PASS)){
-            FileDAO fileDAO=new FileDAO(connection);
-            System.out.println(fileDAO.findById(1));
-        }
+//        System.out.println(Controller.findFileById(1));
+//        System.out.println(Controller.findStorageById(1));
+
+//        Controller.delete(Controller.findStorageById(1),Controller.findFileById(1));
+//        System.out.println(Controller.findFileById(1));
+//        System.out.println(Controller.findStorageById(1));
+
+//        Controller.putAll(storage,list);
+//        System.out.println(Controller.findFileById(1));
+//        System.out.println(Controller.findStorageById(1));
+
+//        Controller.transferAll(Controller.findStorageById(1),Controller.findStorageById(2));
+//        System.out.println(Controller.findFileById(1));
+//        System.out.println(Controller.findStorageById(1));
+
+//        Controller.transferFile(Controller.findStorageById(1),Controller.findStorageById(2),1);
+        System.out.println(Controller.findFileById(1));
+        System.out.println(Controller.findStorageById(1));
     }
 
 

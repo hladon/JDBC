@@ -33,8 +33,7 @@ public class StorageDAO extends DAO<Storage> {
         try (    PreparedStatement preparedStatement=connection.prepareStatement("UPDATE STORAGE SET " +
                      " FORMATS_SUPPORTED=?,STORAGE_COUNTRY=?,STORAGE_MAX_SIZE=? WHERE ID=?")) {
 
-            preparedStatement.setString(1,Arrays.toString(storage.getFormatsSupported()).
-                    replace('[',' ').replace(']',' ').trim());
+            preparedStatement.setString(1,arrayToString(storage.getFormatsSupported()));
             preparedStatement.setString(2,storage.getStorageCountry());
             preparedStatement.setLong(3,storage.getStorageMaxSize());
             preparedStatement.setLong(4,storage.getId());
@@ -57,6 +56,17 @@ public class StorageDAO extends DAO<Storage> {
     public Storage findById(long id) throws SQLException{
         String query="SELECT*FROM STORAGE WHERE ID="+id;
         return qetResult(query);
+    }
+    private static String arrayToString(String[] theAray) {
+        String result = "";
+        for (int i = 0; i < theAray.length; i++) {
+            if (i > 0) {
+                result = result + ",";
+            }
+            String item = theAray[i];
+            result = result + item;
+        }
+         return result;
     }
 
     protected Storage getObject(ResultSet resultSet) throws SQLException {

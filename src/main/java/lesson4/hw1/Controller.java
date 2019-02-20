@@ -5,20 +5,17 @@ import java.util.List;
 
 public class Controller {
 
+    private static final String DB_URL = "jdbc:oracle:thin:@gromcode-lessons.ctmtirr3ce0v.us-east-2.rds.amazonaws.com:1521:orcl";
 
+    private static final String USER = "main";
+    private static final String PASS = "QWer1234";
 
 
     public static void put(Storage storage, File file) throws Exception {
 
-        init(storage, file);
-        file.setStorage(storage);
-        storage.setStorageMaxSize(storage.getStorageMaxSize() - file.getSize());
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
-            FileDAO fileDAO = new FileDAO(connection);
-            fileDAO.update(file);
-            StorageDAO storageDAO = new StorageDAO(connection);
-            storageDAO.update(storage);
+            putFile(storage,file,connection);
             connection.commit();
         }
 
@@ -27,17 +24,8 @@ public class Controller {
     public static void putAll(Storage storage, List<File> files) throws Exception {
         try (Connection connection = getConnection()) {
             connection.setAutoCommit(false);
-            FileDAO fileDAO = new FileDAO(connection);
-            StorageDAO storageDAO = new StorageDAO(connection);
 
-            for (File file : files) {
-                init(storage, file);
-                file.setStorage(storage);
-                fileDAO.update(file);
-
-                storage.setStorageMaxSize(storage.getStorageMaxSize() - file.getSize());
-                storageDAO.update(storage);
-            }
+            putList(storage,files,connection);
 
             connection.commit();
         }
@@ -64,7 +52,7 @@ public class Controller {
                 remove(storageFrom, file, connection);
             }
 
-            putAll(storageTo, list);
+            putList(storageTo,list,connection);
 
             connection.commit();
         }
@@ -93,6 +81,43 @@ public class Controller {
     public static Storage findStorageById(long id)throws SQLException {
         StorageDAO storageDAO=new StorageDAO(getConnection());
         return storageDAO.findById(id);
+    }
+
+    public static void update(File file) throws SQLException{
+        FileDAO fileDAO = new FileDAO(getConnection());
+        fileDAO.update(file);
+    }
+    public static void update(Storage storage) throws SQLException{
+        StorageDAO storageDAO = new StorageDAO(getConnection());
+        storageDAO.update(storage);
+    }
+
+    private static File putFile(Storage storage,File file,Connection connection) throws Exception{
+        init(storage, file);
+        file.setStorage(storage);
+        storage.setStorageMaxSize(storage.getStorageMaxSize() - file.getSize());
+
+            FileDAO fileDAO = new FileDAO(connection);
+            fileDAO.update(file);
+            StorageDAO storageDAO = new StorageDAO(connection);
+            storageDAO.update(storage);
+        return file;
+    }
+
+    private static void putList(Storage storage, List<File> files,Connection connection) throws Exception{
+        FileDAO fileDAO = new FileDAO(connection);
+        StorageDAO storageDAO = new StorageDAO(connection);
+
+        for (File file : files) {
+            init(storage, file);
+            if (file.getStorage()!=null)
+                remove(file.getStorage(),file,connection);
+            file.setStorage(storage);
+            fileDAO.update(file);
+
+            storage.setStorageMaxSize(storage.getStorageMaxSize() - file.getSize());
+            storageDAO.update(storage);
+        }
     }
 
     private static void remove(Storage storage, File file, Connection connection) throws Exception {

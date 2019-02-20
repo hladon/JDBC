@@ -20,27 +20,31 @@ public class Demo {
         Storage storage1=new Storage((long)2,formats1,"Denmark",32000);
         List<File> list=new ArrayList<>();
         list.add(file1);
-        list.add(file2);
+        list.add(file4);
 
 //        Controller.put(storage,file1);
 //        System.out.println(Controller.findFileById(1));
 //        System.out.println(Controller.findStorageById(1));
 
-//        Controller.delete(Controller.findStorageById(1),Controller.findFileById(1));
+//        Controller.delete(Controller.findStorageById(1),Controller.findFileById(2));
 //        System.out.println(Controller.findFileById(1));
 //        System.out.println(Controller.findStorageById(1));
 
-//        Controller.putAll(storage,list);
+//        Controller.putAll(Controller.findStorageById(1),list);
 //        System.out.println(Controller.findFileById(1));
 //        System.out.println(Controller.findStorageById(1));
 
-//        Controller.transferAll(Controller.findStorageById(1),Controller.findStorageById(2));
-//        System.out.println(Controller.findFileById(1));
-//        System.out.println(Controller.findStorageById(1));
-
-//        Controller.transferFile(Controller.findStorageById(1),Controller.findStorageById(2),1);
+        Controller.transferAll(Controller.findStorageById(1),Controller.findStorageById(2));
         System.out.println(Controller.findFileById(1));
         System.out.println(Controller.findStorageById(1));
+
+//        Controller.transferFile(Controller.findStorageById(1),Controller.findStorageById(2),1);
+//        System.out.println(Controller.findFileById(4));
+//        System.out.println(Controller.findStorageById(2));
+
+
+
+
     }
 
 

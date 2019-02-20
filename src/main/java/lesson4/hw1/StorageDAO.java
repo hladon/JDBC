@@ -33,7 +33,8 @@ public class StorageDAO extends DAO<Storage> {
         try (    PreparedStatement preparedStatement=connection.prepareStatement("UPDATE STORAGE SET " +
                      " FORMATS_SUPPORTED=?,STORAGE_COUNTRY=?,STORAGE_MAX_SIZE=? WHERE ID=?")) {
 
-            preparedStatement.setString(1,Arrays.toString(storage.getFormatsSupported()));
+            preparedStatement.setString(1,Arrays.toString(storage.getFormatsSupported()).
+                    replace('[',' ').replace(']',' ').trim());
             preparedStatement.setString(2,storage.getStorageCountry());
             preparedStatement.setLong(3,storage.getStorageMaxSize());
             preparedStatement.setLong(4,storage.getId());
